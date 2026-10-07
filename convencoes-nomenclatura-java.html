@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Convenções de Nomenclatura em Java</title>
+<style>
+  :root{
+    --java-orange:#f89820;
+    --java-blue:#5382a1;
+    --bg:#f4f6f9;
+    --card:#ffffff;
+    --ink:#1b2431;
+    --ink-soft:#5a6879;
+    --line:#e2e6ec;
+    --code-bg:#1e2430;
+    --code-ink:#e6edf3;
+    --ok-bg:#e7f6ec; --ok-ink:#12663a; --ok-line:#b7e3c7;
+    --bad-bg:#fdeaea; --bad-ink:#93231f; --bad-line:#f3c4c1;
+    --radius:12px;
+  }
+
+  *{box-sizing:border-box}
+
+  html{scroll-behavior:smooth}
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:16px;
+    line-height:1.6;
+  }
+
+  /* ---------- Cabeçalho ---------- */
+  header.hero{
+    background:linear-gradient(135deg,#22303f 0%,var(--java-blue) 55%,#7aa7bd 100%);
+    color:#fff;
+    padding:56px 24px 48px;
+    border-bottom:5px solid var(--java-orange);
+  }
+  .hero-inner{max-width:1060px;margin:0 auto}
+  header.hero .kicker{
+    text-transform:uppercase;
+    letter-spacing:.14em;
+    font-size:.74rem;
+    font-weight:700;
+    opacity:.85;
+    margin:0 0 10px;
+  }
+  header.hero h1{
+    margin:0 0 12px;
+    font-size:clamp(1.7rem,4vw,2.5rem);
+    line-height:1.2;
+  }
+  header.hero p{
+    margin:0;
+    max-width:62ch;
+    opacity:.92;
+    font-size:1.02rem;
+  }
+  .hero-tags{margin-top:20px;display:flex;flex-wrap:wrap;gap:8px}
+  .hero-tags span{
+    background:rgba(255,255,255,.14);
+    border:1px solid rgba(255,255,255,.28);
+    border-radius:999px;
+    padding:4px 12px;
+    font-size:.78rem;
+    font-weight:600;
+  }
+
+  /* ---------- Navegação ---------- */
+  nav.toc{
+    position:sticky;
+    top:0;
+    z-index:20;
+    background:rgba(255,255,255,.94);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav.toc ul{
+    max-width:1060px;
+    margin:0 auto;
+    padding:10px 18px;
+    list-style:none;
+    display:flex;
+    gap:6px;
+    overflow-x:auto;
+    scrollbar-width:thin;
+  }
+  nav.toc a{
+    display:block;
+    white-space:nowrap;
+    text-decoration:none;
+    color:var(--ink-soft);
+    font-size:.82rem;
+    font-weight:600;
+    padding:6px 11px;
+    border-radius:999px;
+    border:1px solid transparent;
+  }
+  nav.toc a:hover{border-color:var(--line);background:#f0f3f7;color:var(--ink)}
+  nav.toc a.active{background:#22303f;color:#fff}
+
+  /* ---------- Layout ---------- */
+  main{max-width:1060px;margin:0 auto;padding:32px 20px 80px}
+
+  section{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:26px 26px 30px;
+    margin-bottom:22px;
+    scroll-margin-top:70px;
+  }
+  section > h2{
+    margin:0 0 6px;
+    font-size:1.28rem;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  section > h2 .num{
+    background:var(--java-orange);
+    color:#2a1a00;
+    font-size:.78rem;
+    font-weight:800;
+    min-width:26px;
+    height:26px;
+    border-radius:8px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    flex:0 0 auto;
+  }
+  section > p.lead{margin:0 0 18px;color:var(--ink-soft)}
+  h3{font-size:1rem;margin:24px 0 10px}
+  p{margin:0 0 12px}
+  ul,ol{margin:0 0 14px;padding-left:22px}
+  li{margin:4px 0}
+
+  /* ---------- Código ---------- */
+  code{
+    font-family:"JetBrains Mono",Consolas,"SF Mono",Menlo,monospace;
+    font-size:.86em;
+    background:#eef1f6;
+    border:1px solid var(--line);
+    border-radius:5px;
+    padding:1px 5px;
+  }
+  pre{
+    background:var(--code-bg);
+    color:var(--code-ink);
+    border-radius:10px;
+    padding:16px 18px;
+    overflow-x:auto;
+    margin:0 0 16px;
+    font-size:.84rem;
+    line-height:1.55;
+  }
+  pre code{
+    background:none;
+    border:0;
+    padding:0;
+    color:inherit;
+    font-size:1em;
+  }
+  pre .kw{color:#ff9d76}     /* keyword   */
+  pre .ty{color:#7ec9e8}     /* tipo      */
+  pre .st{color:#b9e28a}     /* string    */
+  pre .cm{color:#8a97a8;font-style:italic}  /* comentário */
+  pre .fn{color:#ffd479}     /* método    */
+  pre .an{color:#c8a2ff}     /* anotação  */
+  pre .bad{color:#ff8b8b;text-decoration:underline wavy #ff8b8b}
+  pre .good{color:#8ef0a8}
+
+  /* ---------- Tabelas ---------- */
+  .table-wrap{overflow-x:auto;margin:0 0 18px;border:1px solid var(--line);border-radius:10px}
+  table{width:100%;border-collapse:collapse;font-size:.9rem;min-width:520px}
+  thead th{
+    background:#22303f;
+    color:#fff;
+    text-align:left;
+    padding:10px 14px;
+    font-size:.78rem;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    white-space:nowrap;
+  }
+  tbody td{padding:10px 14px;border-top:1px solid var(--line);vertical-align:top}
+  tbody tr:nth-child(even){background:#fafbfc}
+  tbody td code{white-space:nowrap}
+
+  /* ---------- Badges ---------- */
+  .ok,.no{
+    display:inline-block;
+    font-size:.74rem;
+    font-weight:700;
+    border-radius:999px;
+    padding:2px 9px;
+    border:1px solid;
+    white-space:nowrap;
+  }
+  .ok{background:var(--ok-bg);color:var(--ok-ink);border-color:var(--ok-line)}
+  .no{background:var(--bad-bg);color:var(--bad-ink);border-color:var(--bad-line)}
+
+  /* ---------- Cards internos ---------- */
+  .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+  .mini{
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:16px;
+    background:#fbfcfe;
+  }
+  .mini h4{
+    margin:0 0 6px;
+    font-size:.82rem;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--java-blue);
+  }
+  .mini p{margin:0;font-size:.9rem;color:var(--ink-soft)}
+  .mini pre{margin:10px 0 0;font-size:.79rem;padding:12px}
+
+  .callout{
+    border-left:4px solid var(--java-orange);
+    background:#fff9ef;
+    border-radius:0 10px 10px 0;
+    padding:14px 18px;
+    margin:0 0 16px;
+    font-size:.94rem;
+  }
+  .callout strong{color:#8a5a00}
+  .callout.tip{border-left-color:var(--java-blue);background:#f2f7fb}
+  .callout.tip strong{color:#2c5f7d}
+
+  .diff-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.82rem;color:var(--ink-soft);margin-bottom:10px}
+  .diff-legend span{display:flex;align-items:center;gap:6px}
+
+  /* ---------- Checklist ---------- */
+  ul.check{list-style:none;padding:0}
+  ul.check li{
+    position:relative;
+    padding:8px 0 8px 32px;
+    border-bottom:1px dashed var(--line);
+    font-size:.93rem;
+  }
+  ul.check li:last-child{border-bottom:0}
+  ul.check li::before{
+    content:"";
+    position:absolute;
+    left:0;top:13px;
+    width:16px;height:16px;
+    border:2px solid var(--java-blue);
+    border-radius:4px;
+  }
+
+  footer{
+    max-width:1060px;
+    margin:0 auto;
+    padding:0 20px 60px;
+    color:var(--ink-soft);
+    font-size:.85rem;
+  }
+  footer h3{color:var(--ink);font-size:.95rem}
+  footer ul{padding-left:20px}
+  footer a{color:var(--java-blue)}
+
+  @media print{
+    nav.toc{display:none}
+    body{background:#fff}
+    section{break-inside:avoid;border-color:#ccc;box-shadow:none}
+    header.hero{background:#22303f !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    pre{background:#f5f5f5;color:#111}
+    pre .kw,pre .ty,pre .st,pre .cm,pre .fn,pre .an,pre .bad,pre .good{color:#111}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="kicker">Java · Guia rápido · Referência pessoal</p>
+    <h1>Convenções de Nomenclatura em Java</h1>
+    <p>
+      Como nomear classes, métodos, variáveis, constantes, pacotes, genéricos e tudo mais.
+      Seguir essas regras deixa o código legível para qualquer pessoa (inclusive você daqui a seis meses)
+      e evita atrito com ferramentas, frameworks e revisores.
+    </p>
+    <div class="hero-tags">
+      <span>UpperCamelCase</span>
+      <span>lowerCamelCase</span>
+      <span>UPPER_SNAKE_CASE</span>
+      <span>get / set / is</span>
+      <span>@Override</span>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Índice">
+  <ul>
+    <li><a href="#resumo">Resumo</a></li>
+    <li><a href="#classes">Classes</a></li>
+    <li><a href="#metodos">Métodos</a></li>
+    <li><a href="#variaveis">Variáveis</a></li>
+    <li><a href="#constantes">Constantes</a></li>
+    <li><a href="#pacotes">Pacotes</a></li>
+    <li><a href="#genericos">Genéricos</a></li>
+    <li><a href="#enums">Enums e Records</a></li>
+    <li><a href="#boas-praticas">Boas práticas</a></li>
+    <li><a href="#proibido">Evite</a></li>
+    <li><a href="#antes-depois">Antes/depois</a></li>
+    <li><a href="#checklist">Checklist</a></li>
+  </ul>
+</nav>
+
+<main>
+
+<!-- ============ RESUMO ============ -->
+<section id="resumo">
+  <h2><span class="num">1</span> Resumo rápido</h2>
+  <p class="lead">Se você for ler uma tabela nesta página, leia esta.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Elemento</th><th>Convenção</th><th>Exemplo</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Classe / Interface</td><td><code>UpperCamelCase</code></td><td><code>Product</code>, <code>HttpClient</code>, <code>OrderService</code></td></tr>
+        <tr><td>Método</td><td><code>lowerCamelCase</code> (verbo)</td><td><code>calculateTotal()</code>, <code>addProducts()</code></td></tr>
+        <tr><td>Variável / Campo</td><td><code>lowerCamelCase</code> (substantivo)</td><td><code>quantity</code>, <code>totalPrice</code></td></tr>
+        <tr><td>Constante<br><code>static final</code></td><td><code>UPPER_SNAKE_CASE</code></td><td><code>MAX_QUANTITY</code>, <code>DEFAULT_TIMEOUT_MS</code></td></tr>
+        <tr><td>Pacote</td><td>tudo minúsculo</td><td><code>com.empresa.projeto.modulo</code></td></tr>
+        <tr><td>Enum (tipo / valor)</td><td><code>UpperCamelCase</code> / <code>UPPER_SNAKE_CASE</code></td><td><code>OrderStatus.PENDING_PAYMENT</code></td></tr>
+        <tr><td>Record</td><td><code>UpperCamelCase</code> + campos <code>lowerCamelCase</code></td><td><code>record Money(double amount, Currency currency)</code></td></tr>
+        <tr><td>Genérico (type parameter)</td><td>1 letra maiúscula</td><td><code>T</code>, <code>E</code>, <code>K</code>, <code>V</code></td></tr>
+        <tr><td>Anotação</td><td><code>UpperCamelCase</code></td><td><code>@Override</code>, <code>@Deprecated</code></td></tr>
+        <tr><td>Exceção</td><td><code>UpperCamelCase</code> + sufixo</td><td><code>InvalidPriceException</code></td></tr>
+        <tr><td>Arquivo <code>.java</code></td><td>idêntico à classe pública</td><td><code>Product.java</code> → <code>public class Product</code></td></tr>
+        <tr><td>Método de teste</td><td><code>lowerCamelCase</code> descritivo</td><td><code>shouldThrowWhenQuantityIsNegative()</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout">
+    <strong>Regra de ouro:</strong> Java diferencia maiúsculas de minúsculas, então
+    <code>Product</code> e <code>product</code> são coisas diferentes. A capitalização é a única
+    forma rápida de olhar para um nome e saber se é <em>classe</em> ou <em>variável</em>.
+  </div>
+</section>
+
+<!-- ============ CLASSES ============ -->
+<section id="classes">
+  <h2><span class="num">2</span> Classes e interfaces</h2>
+  <p class="lead">Toda palavra começa com maiúscula, sem underscores. Use substantivos, no singular.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Nome</th><th></th><th>Por quê</th></tr></thead>
+      <tbody>
+        <tr><td><code>Product</code></td><td><span class="ok">correto</span></td><td>Substantivo, singular, UpperCamelCase</td></tr>
+        <tr><td><code>Products</code></td><td><span class="no">evite</span></td><td>Plural só faz sentido se a classe <em>representa uma coleção</em></td></tr>
+        <tr><td><code>product</code></td><td><span class="no">errado</span></td><td>Minúscula é convenção de variável</td></tr>
+        <tr><td><code>Product_Item</code></td><td><span class="no">errado</span></td><td>Underscore não se usa em nomes de classe</td></tr>
+        <tr><td><code>ClientePedido</code></td><td><span class="ok">correto</span></td><td>Sem acentos nem cedilha — identificadores Java são ASCII por convenção</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Interfaces</h3>
+  <p>
+    Mesma regra da classe. O nome ideal descreve uma <strong>capacidade</strong> ou um <strong>papel</strong>,
+    não um “objeto”: adjetivos ou verbos terminados em <code>-able</code>, <code>-ible</code>, ou papéis do domínio.
+  </p>
+  <pre><code><span class="good">// capacidade → adjetivo</span>
+<span class="kw">public interface</span> <span class="ty">Comparable</span>&lt;<span class="ty">T</span>&gt; { }
+<span class="kw">public interface</span> <span class="ty">Runnable</span> { }
+<span class="kw">public interface</span> <span class="ty">Serializable</span> { }
+
+<span class="good">// papel do domínio → substantivo</span>
+<span class="kw">public interface</span> <span class="ty">PaymentGateway</span> { }
+<span class="kw">public interface</span> <span class="ty">CustomerRepository</span> { }
+<span class="kw">public interface</span> <span class="ty">EmailSender</span> { }
+
+<span class="bad">// ❌ prefixo "I" e sufixo "Impl" são considerados ruído</span>
+<span class="kw">public interface</span> <span class="bad">IProductService</span> { }
+<span class="kw">public class</span> <span class="bad">ProductServiceImpl</span> { }</code></pre>
+
+  <div class="callout tip">
+    <strong>Não use o prefixo <code>I</code></strong> (<code>IProductService</code>). Isso é herança do C#/COM,
+    não é convenção Java. Quem quiser saber que é interface usa a IDE ou o próprio <code>interface</code> na declaração.
+  </div>
+
+  <h3>Classes com sufixo de papel</h3>
+  <p>Sufixos são úteis quando a classe cumpre um papel específico conhecido:</p>
+  <div class="grid">
+    <div class="mini">
+      <h4>Criação</h4>
+      <p><code>ProductFactory</code>, <code>ProductBuilder</code>, <code>InvoiceDto</code></p>
+    </div>
+    <div class="mini">
+      <h4>Exceções</h4>
+      <p><code>InvalidPriceException</code>, <code>StockUnavailableException</code></p>
+    </div>
+    <div class="mini">
+      <h4>Eventos / Listeners</h4>
+      <p><code>OrderPlacedEvent</code>, <code>ButtonClickListener</code></p>
+    </div>
+    <div class="mini">
+      <h4>Testes</h4>
+      <p><code>ProductTest</code>, <code>ProductIntegrationTest</code></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MÉTODOS ============ -->
+<section id="metodos">
+  <h2><span class="num">3</span> Métodos</h2>
+  <p class="lead">Começam com <strong>minúscula</strong>. Sempre. O nome deve dizer o que o método <em>faz</em> ou <em>retorna</em>.</p>
+
+  <pre><code><span class="good">// ✅ verbo + complemento, lowerCamelCase</span>
+<span class="kw">public double</span> <span class="fn">calculateTotal</span>()
+<span class="kw">public void</span>   <span class="fn">addProducts</span>(<span class="kw">int</span> quantity)
+<span class="kw">public void</span>   <span class="fn">removeProducts</span>(<span class="kw">int</span> quantity)
+<span class="kw">public</span> <span class="ty">Product</span> <span class="fn">findById</span>(<span class="kw">long</span> id)
+
+<span class="bad">// ❌ PascalCase em método (nome de classe disfarçado)</span>
+<span class="kw">public double</span> <span class="bad">TotalValueInStock</span>()
+<span class="kw">public void</span>   <span class="bad">AddProducts</span>(<span class="kw">int</span> quantity)
+
+<span class="bad">// ❌ prefixos/sufixos redundantes</span>
+<span class="kw">public double</span> <span class="bad">getCalculateProductTotalValue</span>()</code></pre>
+
+  <h3>Prefixos consagrados</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Prefixo</th><th>Quando usar</th><th>Exemplos</th></tr></thead>
+      <tbody>
+        <tr><td><code>get</code></td><td>Getter de propriedade (JavaBeans)</td><td><code>getName()</code>, <code>getTotalPrice()</code></td></tr>
+        <tr><td><code>set</code></td><td>Setter de propriedade</td><td><code>setName(String name)</code></td></tr>
+        <tr><td><code>is</code> / <code>has</code> / <code>can</code></td><td>Getter <code>boolean</code>; a pergunta deve ser respondível com sim/não</td><td><code>isActive()</code>, <code>hasStock()</code>, <code>canCancel()</code></td></tr>
+        <tr><td><code>to</code></td><td>Converte para outro tipo (não muta o objeto)</td><td><code>toString()</code>, <code>toBigDecimal()</code>, <code>toDto()</code></td></tr>
+        <tr><td><code>of</code> / <code>from</code> / <code>valueOf</code></td><td>Fábrica estática; <code>of</code> recebe o dado, <code>from</code> recebe outra representação</td><td><code>List.of(...)</code>, <code>Duration.ofSeconds(5)</code></td></tr>
+        <tr><td><code>parse</code></td><td>Entrada textual → objeto</td><td><code>Integer.parseInt("42")</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Métodos que sobrescrevem a classe <code>Object</code></h3>
+  <p>
+    <code>toString()</code>, <code>equals()</code> e <code>hashCode()</code> são declarados em minúsculas na
+    classe <code>Object</code> — então <strong>você não pode renomeá-los</strong>. Escrever
+    <code>ToString()</code> cria um método novo e inútil, sem relação com o original.
+    Sempre use <code>@Override</code> para pegar esse erro na compilação.
+  </p>
+  <pre><code><span class="an">@Override</span>
+<span class="kw">public</span> <span class="ty">String</span> <span class="fn">toString</span>() {
+    <span class="kw">return</span> name + <span class="st">", $ "</span> + price + <span class="st">", "</span> + quantity + <span class="st">" units"</span>;
+}</code></pre>
+
+  <div class="callout tip">
+    <strong>Nomeie pelo que o método faz, não por como ele faz.</strong>
+    <code>calculateTotal()</code> é melhor que <code>loopOverProductsAndSumPrices()</code>.
+  </div>
+</section>
+
+<!-- ============ VARIÁVEIS ============ -->
+<section id="variaveis">
+  <h2><span class="num">4</span> Variáveis, campos e parâmetros</h2>
+  <p class="lead">Tudo em <code>lowerCamelCase</code>, sem prefixos, com nome que descreve o conteúdo.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Nome</th><th></th><th>Observação</th></tr></thead>
+      <tbody>
+        <tr><td><code>int quantity</code></td><td><span class="ok">correto</span></td><td>Diz o que a variável contém</td></tr>
+        <tr><td><code>int q</code>, <code>int qtd</code></td><td><span class="no">evite</span></td><td>Abreviação obscura; só loops e escopos minúsculos aceitam nomes curtos</td></tr>
+        <tr><td><code>int n1</code>, <code>int n2</code></td><td><span class="no">evite</span></td><td>Numeração em nome quase sempre indica código que devia ser lista/array</td></tr>
+        <tr><td><code>String productName</code></td><td><span class="no">evite</span></td><td>Repetir o nome da classe no campo é redundante → <code>name</code></td></tr>
+        <tr><td><code>String strName</code>, <code>int iCount</code></td><td><span class="no">errado</span></td><td>Notação húngara (tipo no nome) — a IDE já mostra o tipo</td></tr>
+        <tr><td><code>String _name</code>, <code>String m_name</code></td><td><span class="no">errado</span></td><td>Prefixo “de C++/convenção antiga”; em Java campo privado não leva prefixo</td></tr>
+        <tr><td><code>double salario</code></td><td><span class="no">errado</span></td><td>Sem acentos — o compilador aceita, mas quebra encoding e é um inferno em diff/log</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Variável <code>final</code> local</h3>
+  <p>
+    Continua <code>lowerCamelCase</code> — <code>UPPER_SNAKE_CASE</code> é reservado para constantes de <em>classe</em>
+    (<code>static final</code>).
+  </p>
+  <pre><code><span class="kw">final double</span> taxRate = <span class="st">0.18</span>;   <span class="good">// ✅ local constant</span>
+<span class="kw">static final double</span> TAX_RATE = <span class="st">0.18</span>; <span class="good">// ✅ constante da classe</span></code></pre>
+
+  <h3>Nomes curtos aceitáveis</h3>
+  <ul>
+    <li><code>i</code>, <code>j</code>, <code>k</code> — índices de laço <code>for</code>.</li>
+    <li><code>x</code>, <code>y</code> — coordenadas matemáticas.</li>
+    <li><code>e</code> — exceção capturada em bloco <code>catch</code> de escopo curto.</li>
+  </ul>
+  <p>Evite <code>l</code> (parece <code>1</code>) e <code>O</code> / <code>I</code> isolados. Se o laço passa de três linhas, dê um nome de verdade.</p>
+</section>
+
+<!-- ============ CONSTANTES ============ -->
+<section id="constantes">
+  <h2><span class="num">5</span> Constantes</h2>
+  <p class="lead"><code>static final</code> → <code>UPPER_SNAKE_CASE</code>. O valor não muda durante a execução.</p>
+
+  <pre><code><span class="kw">public class</span> <span class="ty">Order</span> {
+    <span class="kw">public static final int</span>   MAX_ITEMS        = <span class="st">100</span>;
+    <span class="kw">public static final int</span>   DEFAULT_QUANTITY = <span class="st">1</span>;
+    <span class="kw">public static final</span> <span class="ty">String</span> STATUS_PENDING  = <span class="st">"PENDING"</span>;
+    <span class="kw">private static final</span> <span class="kw">long</span>  TIMEOUT_MILLIS  = <span class="st">5_000L</span>; <span class="good">// constante de implementação: private</span>
+}</code></pre>
+
+  <div class="callout">
+    <strong>Sobrenome, não sublinhado.</strong> Para sufixos de unidade prefira <code>_MS</code>, <code>_SECONDS</code>,
+    <code>_BYTES</code>, <code>_RATIO</code> — quem lê o código sabe a unidade sem abrir a declaração.
+  </div>
+
+  <h3>Atenção: <code>final</code> sozinho não cria constante</h3>
+  <pre><code><span class="kw">final</span> <span class="ty">List</span>&lt;<span class="ty">String</span>&gt; items = <span class="kw">new</span> <span class="ty">ArrayList</span>&lt;&gt;();
+items.add(<span class="st">"x"</span>);  <span class="cm">// legal! o final trava a referência, não o conteúdo</span>
+
+<span class="cm">// por isso `static final List` só é "constante" se for imutável:</span>
+<span class="kw">public static final</span> <span class="ty">List</span>&lt;<span class="ty">String</span>&gt; DEFAULT_TAGS = <span class="ty">List</span>.<span class="fn">of</span>(<span class="st">"a"</span>, <span class="st">"b"</span>);</code></pre>
+</section>
+
+<!-- ============ PACOTES ============ -->
+<section id="pacotes">
+  <h2><span class="num">6</span> Pacotes e arquivos</h2>
+
+  <pre><code><span class="good">// ✅ pacote: tudo minúsculo, ponto como separador, domínio invertido</span>
+<span class="kw">package</span> com.empresa.projeto.modulo;
+
+<span class="good">// mais exemplos</span>
+com.empresa.vendas.pedido
+com.empresa.vendas.pedido.modelo      <span class="cm">// subpacote: divida por responsabilidade</span>
+br.com.minhaLoja.estoque              <span class="cm">// evite maiúsculas e camelCase aqui</span></code></pre>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Regra</th><th>Detalhe</th></tr></thead>
+      <tbody>
+        <tr><td>Só minúsculas</td><td><code>com.empresa.pedidos</code>, nunca <code>com.Empresa.Pedidos</code></td></tr>
+        <tr><td>Sem hífen, sem espaço</td><td>Hífen é inválido em identificador Java</td></tr>
+        <tr><td>Nome do arquivo = classe pública</td><td><code>Product.java</code> precisa conter <code>public class Product</code> (case-sensitive)</td></tr>
+        <tr><td>Uma classe pública por arquivo</td><td>Classes auxiliares podem ser <em>package-private</em> no mesmo arquivo</td></tr>
+        <tr><td>Palavras reservadas proibidas</td><td><code>int</code>, <code>class</code>, <code>new</code>, <code>return</code>, <code>var</code>… não podem ser usadas nem como nome de classe</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ GENÉRICOS ============ -->
+<section id="genericos">
+  <h2><span class="num">7</span> Tipos genéricos (type parameters)</h2>
+  <p class="lead">Uma letra maiúscula só. Se precisar de duas letras, use <code>T1</code> — nunca <code>Type1</code>.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Letra</th><th>Significado</th><th>Exemplo</th></tr></thead>
+      <tbody>
+        <tr><td><code>T</code></td><td>Type (tipo genérico comum)</td><td><code>class Box&lt;T&gt;</code></td></tr>
+        <tr><td><code>E</code></td><td>Element (elemento de coleção)</td><td><code>interface List&lt;E&gt;</code></td></tr>
+        <tr><td><code>K</code> / <code>V</code></td><td>Key / Value (mapa)</td><td><code>interface Map&lt;K, V&gt;</code></td></tr>
+        <tr><td><code>N</code></td><td>Number</td><td><code>class Stack&lt;N extends Number&gt;</code></td></tr>
+        <tr><td><code>R</code></td><td>Result / Return</td><td><code>interface Function&lt;T, R&gt;</code></td></tr>
+        <tr><td><code>S</code>, <code>U</code>, <code>V</code></td><td>2º, 3º, 4º tipo genérico</td><td><code>class Trio&lt;A, B, C&gt;</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <pre><code><span class="good">// ✅</span>
+<span class="kw">public class</span> <span class="ty">Cache</span>&lt;<span class="ty">K</span>, <span class="ty">V</span>&gt; { }
+<span class="kw">public</span> &lt;<span class="ty">T</span>&gt; <span class="ty">List</span>&lt;<span class="ty">T</span>&gt; <span class="fn">filter</span>(<span class="ty">List</span>&lt;<span class="ty">T</span>&gt; input) { }
+
+<span class="bad">// ❌</span>
+<span class="kw">public class</span> <span class="bad">Cache</span>&lt;KeyType, ValueType&gt; { }
+<span class="kw">public class</span> <span class="bad">Cache</span>&lt;key, value&gt; { }   <span class="cm">// parece variável, não tipo</span></code></pre>
+</section>
+
+<!-- ============ ENUMS E RECORDS ============ -->
+<section id="enums">
+  <h2><span class="num">8</span> Enums, records e anotações</h2>
+
+  <h3>Enum</h3>
+  <p>Tipo em <code>UpperCamelCase</code> (singular), valores em <code>UPPER_SNAKE_CASE</code>.</p>
+  <pre><code><span class="kw">public enum</span> <span class="ty">OrderStatus</span> {   <span class="cm">// singular: cada valor É um status</span>
+    PENDING_PAYMENT,
+    PAID,
+    SHIPPED,
+    CANCELLED
+}</code></pre>
+  <p>
+    <span class="ok">correto</span> <code>DayOfWeek.MONDAY</code> &nbsp;
+    <span class="no">evite</span> <code>OrderStatus.pendingPayment</code> &nbsp;
+    <span class="no">evite</span> <code>OrderStatuses.PAID</code>
+  </p>
+
+  <h3>Record (Java 16+)</h3>
+  <p>O nome do record é uma classe normal; os componentes são campos <code>lowerCamelCase</code>.</p>
+  <pre><code><span class="kw">public record</span> <span class="ty">Money</span>(<span class="kw">double</span> amount, <span class="ty">Currency</span> currency) { }
+
+<span class="cm">// acessores gerados: amount() e currency() — sem prefixo "get" (é a convenção de record)</span>
+<span class="ty">Money</span> m = <span class="kw">new</span> <span class="ty">Money</span>(<span class="st">10.0</span>, <span class="ty">Currency</span>.getInstance(<span class="st">"BRL"</span>));
+m.<span class="fn">amount</span>();   <span class="good">// ✅</span>
+m.<span class="bad">getAmount</span>(); <span class="cm">// não existe</span></code></pre>
+
+  <h3>Anotações</h3>
+  <pre><code><span class="an">@Override</span>
+<span class="an">@Deprecated</span>
+<span class="an">@FunctionalInterface</span>
+<span class="an">@SuppressWarnings</span>(<span class="st">"unchecked"</span>)</code></pre>
+  <p>Anotações customizadas seguem <code>UpperCamelCase</code> e costumam ser adjetivos: <code>@Transactional</code>, <code>@Validated</code>.</p>
+</section>
+
+<!-- ============ BOAS PRÁTICAS ============ -->
+<section id="boas-praticas">
+  <h2><span class="num">9</span> Boas práticas de nome</h2>
+
+  <div class="grid">
+    <div class="mini">
+      <h4>Booleanos: perguntas</h4>
+      <p>Devem poder ser lidos como sim/não.</p>
+      <pre><code>isActive
+hasStock
+canCancel
+isEmpty()</code></pre>
+    </div>
+    <div class="mini">
+      <h4>Siglas: trate como palavra</h4>
+      <p>Maiúscula só na primeira letra.</p>
+      <pre><code>XmlParser
+parseXml()
+HttpClient
+userId</code></pre>
+    </div>
+    <div class="mini">
+      <h4>Units e coleções</h4>
+      <p>Plural para coleções, unidade no nome.</p>
+      <pre><code>List&lt;Product&gt; products
+long timeoutMillis
+double weightKg</code></pre>
+    </div>
+    <div class="mini">
+      <h4>O tamanho acompanha o escopo</h4>
+      <p>Escopo curto, nome curto; campo de classe, nome completo.</p>
+      <pre><code>for (int i = 0; ...)      // ok
+double invoiceTotalBaseAmount  // campo</code></pre>
+    </div>
+  </div>
+
+  <h3>Siglas: escolha uma e mantenha</h3>
+  <p>
+    As duas escolas convivem no ecossistema: Google Java Style trata a sigla como palavra
+    (<code>XmlHttpRequest</code>), enquanto o estilo Oracle antigo a mantém em caixa alta
+    (<code>XMLHTTPRequest</code>). A regra que importa é <strong>consistência dentro do projeto</strong> —
+    o pior cenário é ter <code>getUserId()</code> e <code>getURL()</code> no mesmo arquivo.
+  </p>
+
+  <h3>Nomes de testes</h3>
+  <pre><code><span class="kw">class</span> <span class="ty">ProductTest</span> {
+
+    <span class="an">@Test</span>
+    <span class="kw">void</span> <span class="fn">shouldReturnZeroWhenQuantityIsZero</span>() { }
+
+    <span class="an">@Test</span>
+    <span class="kw">void</span> <span class="fn">shouldThrowWhenPriceIsNegative</span>() { }
+}</code></pre>
+  <p>
+    Padrões comuns: <code>shouldXxxWhenYyy()</code>, <code>givenXxx_whenYyy_thenZzz()</code>,
+    <code>metodo_estadoEsperado()</code>. Qualquer um serve — desde que diga <em>o comportamento esperado</em>.
+  </p>
+</section>
+
+<!-- ============ EVITE ============ -->
+<section id="proibido">
+  <h2><span class="num">10</span> O que evitar</h2>
+
+  <div class="grid">
+    <div class="mini">
+      <h4>Caracteres <code>$</code> e <code>_</code></h4>
+      <p>Use <strong>apenas</strong> letras e dígitos. O <code>$</code> é usado por compiladores para classes internas
+      (<code>Outer$Inner</code>); <code>_</code> sozinho é <strong>erro de compilação</strong> no Java 9+.</p>
+      <pre><code><span class="bad">String user_name;</span>
+<span class="bad">int $value;</span>
+<span class="bad">int _;</span>  // não compila (Java 9+)</code></pre>
+    </div>
+    <div class="mini">
+      <h4>Nomes genéricos</h4>
+      <p><code>data</code>, <code>info</code>, <code>obj</code>, <code>temp</code>, <code>manager</code>,
+      <code>helper</code>, <code>util</code>, <code>process</code> — não dizem nada e envelhecem mal.</p>
+      <pre><code><span class="bad">Object data;</span>
+<span class="bad">class DataManager2 {} // o "2" é a prova</span></code></pre>
+    </div>
+    <div class="mini">
+      <h4>Nomes que mentem</h4>
+      <p>Se o método mudou de comportamento, renomeie. <code>getUser()</code> que grava no banco é uma armadilha.</p>
+      <pre><code><span class="bad">// busca E atualiza??</span>
+<span class="ty">User</span> <span class="bad">getUser</span>(<span class="kw">long</span> id)</code></pre>
+    </div>
+    <div class="mini">
+      <h4>Números no nome</h4>
+      <p><code>value1</code>, <code>value2</code>, <code>copy2</code> quase sempre pedem um array, uma classe ou um parâmetro.</p>
+      <pre><code><span class="bad">double price1, price2;</span>
+<span class="good">List&lt;Double&gt; prices;</span></code></pre>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>Dica visual:</strong> o compilador aceita praticamente qualquer identificador válido — inclusive
+    <code>int banana = 42;</code>. Quem garante a qualidade é a revisão de código e você mesmo.
+  </div>
+</section>
+
+<!-- ============ ANTES / DEPOIS ============ -->
+<section id="antes-depois">
+  <h2><span class="num">11</span> Antes e depois: aplicando no seu código</h2>
+  <p class="lead">
+    O exemplo abaixo é a classe <code>Products</code> deste repositório (<code>src/introducaopoo/exercicio1</code>)
+    reescrita seguindo as convenções.
+  </p>
+
+  <div class="diff-legend">
+    <span><span class="no">antes</span> o que estava no arquivo</span>
+    <span><span class="ok">depois</span> com as convenções aplicadas</span>
+  </div>
+
+  <pre><code><span class="cm">// ======================= ANTES =======================</span>
+<span class="kw">package</span> introducaopoo.exercicio1;
+
+<span class="kw">public class</span> <span class="bad">Products</span> {                    <span class="cm">// plural</span>
+    <span class="kw">public</span> <span class="ty">String</span> <span class="bad">productName</span>;          <span class="cm">// redundante + campo público</span>
+    <span class="kw">public int</span>    <span class="bad">productQtd</span>;           <span class="cm">// abreviação de "quantity"</span>
+    <span class="kw">public double</span> <span class="bad">productPrice</span>;
+
+    <span class="kw">public double</span> <span class="bad">TotalValueInStock</span>() {   <span class="cm">// método em PascalCase</span>
+        <span class="kw">return</span> <span class="bad">productPrice</span> * <span class="bad">productQtd</span>;
+    }
+
+    <span class="kw">public void</span> <span class="bad">AddProducts</span>(<span class="kw">int</span> quantity) { }
+    <span class="kw">public void</span> <span class="bad">RemoveProducts</span>(<span class="kw">int</span> quantity) { }
+
+    <span class="kw">public</span> <span class="ty">String</span> <span class="bad">ToString</span>() {            <span class="cm">// não sobrescreve nada!</span>
+        <span class="kw">return</span> <span class="bad">productName</span> + <span class="st">", $ "</span> + <span class="bad">productPrice</span>;
+    }
+}</code></pre>
+
+  <pre><code><span class="cm">// ======================= DEPOIS =======================</span>
+<span class="kw">package</span> introducaopoo.exercicio1;      <span class="good">// ✅ já estava correto: minúsculo</span>
+
+<span class="kw">public class</span> <span class="good">Product</span> {                     <span class="good">// substantivo, singular, UpperCamelCase</span>
+    <span class="kw">private</span> <span class="ty">String</span> name;                 <span class="good">// campo: lowerCamelCase, sem prefixo</span>
+    <span class="kw">private int</span>    quantity;              <span class="good">// nome completo, sem abreviação</span>
+    <span class="kw">private double</span> price;                 <span class="good">// encapsulado (private)</span>
+
+    <span class="kw">public double</span> <span class="fn">totalValueInStock</span>() {    <span class="good">// método: lowerCamelCase</span>
+        <span class="kw">return</span> price * quantity;
+    }
+
+    <span class="kw">public void</span> <span class="fn">addProducts</span>(<span class="kw">int</span> quantity) {
+        <span class="kw">this</span>.quantity += quantity;        <span class="cm">// this desempata parâmetro x campo</span>
+    }
+
+    <span class="kw">public void</span> <span class="fn">removeProducts</span>(<span class="kw">int</span> quantity) {
+        <span class="kw">this</span>.quantity -= quantity;
+    }
+
+    <span class="an">@Override</span>                            <span class="good">// garante que estamos sobrescrevendo</span>
+    <span class="kw">public</span> <span class="ty">String</span> <span class="fn">toString</span>() {             <span class="good">// minúsculo, como em Object</span>
+        <span class="kw">return</span> name + <span class="st">", $ "</span> + price + <span class="st">", "</span> + quantity
+             + <span class="st">" units, Total: $ "</span> + <span class="fn">totalValueInStock</span>();
+    }
+}</code></pre>
+
+  <h3>Resumo das mudanças</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Antes</th><th>Depois</th><th>Regra</th></tr></thead>
+      <tbody>
+        <tr><td><code>Products</code></td><td><code>Product</code></td><td>Substantivo no singular</td></tr>
+        <tr><td><code>productName</code></td><td><code>name</code></td><td>Não repetir o nome da classe no campo</td></tr>
+        <tr><td><code>productQtd</code></td><td><code>quantity</code></td><td>Sem abreviações</td></tr>
+        <tr><td><code>TotalValueInStock()</code></td><td><code>totalValueInStock()</code></td><td>Método começa com minúscula</td></tr>
+        <tr><td><code>AddProducts()</code></td><td><code>addProducts()</code></td><td>Método começa com minúscula</td></tr>
+        <tr><td><code>RemoveProducts()</code></td><td><code>removeProducts()</code></td><td>Método começa com minúscula</td></tr>
+        <tr><td><code>ToString()</code></td><td><code>toString()</code> + <code>@Override</code></td><td>Sobrescreve <code>Object.toString()</code></td></tr>
+        <tr><td><code>public int productQtd</code></td><td><code>private int quantity</code></td><td>Encapsulamento (<em>não</em> é nomenclatura, mas anda junto)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout tip">
+    <strong>Bônus:</strong> trocar <code>ToString()</code> por <code>toString()</code> faz o método funcionar de verdade —
+    <code>System.out.println(product)</code> e debugadores passam a usar sua formatação automaticamente.
+    Na versão anterior, <code>println(product)</code> imprimia algo como <code>introducaopoo.exercicio1.Products@1b6d3586</code>.
+  </div>
+</section>
+
+<!-- ============ CHECKLIST ============ -->
+<section id="checklist">
+  <h2><span class="num">12</span> Checklist antes de commitar</h2>
+  <ul class="check">
+    <li>Nome da classe <code>UpperCamelCase</code> e o arquivo tem o mesmo nome da classe pública?</li>
+    <li>Todo método começa com letra minúscula?</li>
+    <li><code>toString</code> / <code>equals</code> / <code>hashCode</code> estão em minúsculas e anotados com <code>@Override</code>?</li>
+    <li>Constantes <code>static final</code> estão em <code>UPPER_SNAKE_CASE</code>?</li>
+    <li>Variáveis em <code>lowerCamelCase</code>, sem <code>_</code>, sem <code>$</code>, sem acentos?</li>
+    <li>Nenhum nome de 1–2 letras sobrevivendo fora de laços e coordenadas?</li>
+    <li>Faltou algum <code>get</code> / <code>set</code> / <code>is</code> nos acessores?</li>
+    <li>Dá para dizer o que a variável guarda só lendo o nome, sem olhar o tipo?</li>
+    <li>Existe algum <code>data</code>, <code>info</code>, <code>temp</code>, <code>manager</code> ou <code>value2</code> no código?</li>
+    <li>Os nomes continuam verdadeiros depois da última mudança de comportamento?</li>
+  </ul>
+</section>
+
+</main>
+
+<footer>
+  <h3>Baseado em</h3>
+  <ul>
+    <li><strong>Oracle</strong> — <em>Code Conventions for the Java Programming Language</em> (§9 Naming Conventions)</li>
+    <li><strong>Google</strong> — <em>Google Java Style Guide</em> (§5 Naming)</li>
+    <li><strong>Joshua Bloch</strong> — <em>Effective Java</em>, 3ª ed. (Itens 68 e 69: nomes e <code>@Override</code>)</li>
+    <li><strong>JLS</strong> — <em>Java Language Specification</em> §3.8 Identifiers (o que é um identificador válido) e §6.1 Declarations</li>
+  </ul>
+  <p>Guia pessoal de estudo · <code>java-estudos</code> · outubro de 2026</p>
+</footer>
+
+<script>
+  // Realce do item ativo no índice conforme a rolagem.
+  (function () {
+    var links = Array.prototype.slice.call(document.querySelectorAll('nav.toc a'));
+    var sections = links
+      .map(function (a) { return document.getElementById(a.getAttribute('href').slice(1)); })
+      .filter(Boolean);
+    if (!sections.length || !('IntersectionObserver' in window)) return;
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        links.forEach(function (a) {
+          a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id);
+        });
+      });
+    }, { rootMargin: '-70px 0px -70% 0px', threshold: 0 });
+
+    sections.forEach(function (s) { observer.observe(s); });
+  })();
+</script>
+
+</body>
+</html>
